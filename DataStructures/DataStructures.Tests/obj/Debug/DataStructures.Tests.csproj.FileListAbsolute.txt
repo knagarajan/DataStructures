@@ -1,7 +1,0 @@
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\bin\Debug\DataStructures.Tests.dll
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\bin\Debug\DataStructures.Tests.pdb
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\bin\Debug\DataStructures.dll
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\bin\Debug\DataStructures.pdb
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\obj\Debug\DataStructures.Tests.dll
-C:\Users\KNagarajan\DataStructures\DataStructures\DataStructures.Tests\obj\Debug\DataStructures.Tests.pdb
