@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace DataStructures.Tests
 {
@@ -37,7 +38,7 @@ namespace DataStructures.Tests
             _subject.Add(expected);
 
             // Assert
-            Assert.AreEqual(expected, _subject.First.Value);
+            Assert.AreEqual(expected, _subject[0].Value);
         }
 
         [TestMethod]
@@ -47,8 +48,7 @@ namespace DataStructures.Tests
             var expected = new int[] { 1, 2, 3 };
 
             // Act
-            foreach (var item in expected)
-                _subject.Add(item);
+            Add(expected);
 
             // Assert
             Assert.AreEqual(expected.Count(), _subject.Count, "count");
@@ -56,11 +56,18 @@ namespace DataStructures.Tests
                 Assert.AreEqual(expected[i], _subject[i].Value);
         }
 
+        private void Add(IList<int> expected)
+        {
+            foreach (var item in expected)
+                _subject.Add(item);
+        }
+
         [TestMethod]
         public void IndexerGet()
         {
             // Arrange
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             var index = 1;
             var expectedValue = 2;
 
@@ -75,7 +82,8 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerGetGreaterThanCount()
         {
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             var actual = _subject[8];
         }
 
@@ -83,7 +91,8 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerGetEqualToCount()
         {
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             var actual = _subject[3];
         }
 
@@ -91,7 +100,8 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerGetNegative()
         {
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             var actual = _subject[-1];
         }
 
@@ -99,7 +109,8 @@ namespace DataStructures.Tests
         public void IndexerSet()
         {
             // Arrange
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             var index = 1;
             var original = _subject[index];
             Node newNode = new Node { Value = 10 };
@@ -117,7 +128,8 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerSetGreaterThanCount()
         {
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             _subject[8] = new Node();
         }
 
@@ -125,7 +137,8 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerSetEqualToCount()
         {
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             _subject[3] = new Node();
         }
 
@@ -133,7 +146,8 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerSetNegative()
         {
-            AddMany();
+            var expected = new int[] { 1, 2, 3 };
+            Add(expected);
             _subject[-1] = new Node();
         }
     }

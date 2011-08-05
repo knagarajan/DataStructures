@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DataStructures
 {
     public class LinkedList
     {
-        public Node First { get; private set; }
+        internal Node First { get; private set; }
 
         public int Count { get; private set; }
 
