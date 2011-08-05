@@ -1,6 +1,7 @@
 ﻿using DataStructures;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace DataStructures.Tests
 {
@@ -8,6 +9,7 @@ namespace DataStructures.Tests
     public class NodeTest
     {
         private Node _subject;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -17,7 +19,12 @@ namespace DataStructures.Tests
         [TestMethod()]
         public void DefaultConstruction()
         {
-            Assert.AreEqual(0, _subject.Data);
+            // Arrange
+            Node next = _subject.Next;
+
+            // Assert
+            Assert.AreEqual(0, _subject.Value, "value");
+            Assert.IsNull(next, "next");
         }
     }
 }
