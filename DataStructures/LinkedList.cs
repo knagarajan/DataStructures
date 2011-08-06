@@ -6,6 +6,17 @@ namespace DataStructures
     {
         internal const string Seperator = ", ";
 
+        public LinkedList(int capacity)
+        {
+            for (int i = 0; i < capacity; i++)
+                Add(0);
+        }
+
+        public LinkedList()
+            : this(0)
+        {
+        }
+
         internal Node First { get; private set; }
 
         public int Count { get; private set; }
@@ -53,7 +64,6 @@ namespace DataStructures
         public override string ToString()
         {
             var result = string.Empty;
-            var current = First;
             for (int i = 0; i < Count; i++)
             {
                 if (i == Count - 1)

@@ -22,12 +22,27 @@ namespace DataStructures.Tests
         public void DefaultConstruction()
         {
             // Arrange
-            Node head = _subject.First;
+            Node first = _subject.First;
             int count = _subject.Count;
 
             // Assert
-            Assert.IsNull(head, "head");
+            Assert.IsNull(first, "head");
             Assert.AreEqual(0, count, "count");
+        }
+
+        [TestMethod]
+        public void ConstructionWithCapacity()
+        {
+            // Arrange
+            var capacity = 4;
+
+            // Act
+            _subject = new LinkedList(capacity);
+
+            // Assert
+            Assert.AreEqual(capacity, _subject.Count);
+            for (int i = 0; i < _subject.Count; i++)
+                Assert.IsNotNull(_subject[i]);
         }
 
         [TestMethod]
