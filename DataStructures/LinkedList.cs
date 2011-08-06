@@ -4,6 +4,8 @@ namespace DataStructures
 {
     public class LinkedList
     {
+        internal const string Seperator = ", ";
+
         internal Node First { get; private set; }
 
         public int Count { get; private set; }
@@ -46,6 +48,20 @@ namespace DataStructures
             var temp = current.Next;
             current.Next = element;
             element.Next = temp.Next;
+        }
+
+        public override string ToString()
+        {
+            var result = string.Empty;
+            var current = First;
+            for (int i = 0; i < Count; i++)
+            {
+                if (i == Count - 1)
+                    result += this[i].Value;
+                else
+                    result += this[i].Value + Seperator;
+            }
+            return result;
         }
 
         private void CheckIndexWithinBounds(int index)

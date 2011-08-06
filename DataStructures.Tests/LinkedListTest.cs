@@ -9,11 +9,13 @@ namespace DataStructures.Tests
     public class LinkedListTest
     {
         private LinkedList _subject;
+        private IList<int> _source;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _subject = new LinkedList();
+            _source = new int[] { 1, 2, 3 };
         }
 
         [TestMethod]
@@ -44,30 +46,35 @@ namespace DataStructures.Tests
         [TestMethod]
         public void AddMany()
         {
-            // Arrange
-            var expected = new int[] { 1, 2, 3 };
-
             // Act
-            Add(expected);
+            Add(_source);
 
             // Assert
-            Assert.AreEqual(expected.Count(), _subject.Count, "count");
+            Assert.AreEqual(_source.Count(), _subject.Count, "count");
             for (int i = 0; i < _subject.Count; i++)
-                Assert.AreEqual(expected[i], _subject[i].Value);
+                Assert.AreEqual(_source[i], _subject[i].Value);
         }
 
-        private void Add(IList<int> expected)
+        [TestMethod]
+        public void ToStringTest()
         {
-            foreach (var item in expected)
-                _subject.Add(item);
+            // Arrange
+            Add(_source);
+            var expected = string.Join(LinkedList.Seperator, _source);
+
+            // Act
+            var actual = _subject.ToString();
+
+            // Assert
+            Assert.AreEqual(actual, expected);
         }
 
+        #region Indexer tests
         [TestMethod]
         public void IndexerGet()
         {
             // Arrange
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             var index = 1;
             var expectedValue = 2;
 
@@ -82,8 +89,7 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerGetGreaterThanCount()
         {
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             var actual = _subject[8];
         }
 
@@ -91,8 +97,7 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerGetEqualToCount()
         {
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             var actual = _subject[3];
         }
 
@@ -100,8 +105,7 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerGetNegative()
         {
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             var actual = _subject[-1];
         }
 
@@ -109,8 +113,7 @@ namespace DataStructures.Tests
         public void IndexerSet()
         {
             // Arrange
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             var index = 1;
             var original = _subject[index];
             Node newNode = new Node { Value = 10 };
@@ -128,8 +131,7 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerSetGreaterThanCount()
         {
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             _subject[8] = new Node();
         }
 
@@ -137,8 +139,7 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerSetEqualToCount()
         {
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             _subject[3] = new Node();
         }
 
@@ -146,9 +147,15 @@ namespace DataStructures.Tests
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void IndexerSetNegative()
         {
-            var expected = new int[] { 1, 2, 3 };
-            Add(expected);
+            Add(_source);
             _subject[-1] = new Node();
+        }
+        #endregion Indexer tests
+
+        private void Add(IList<int> expected)
+        {
+            foreach (var item in expected)
+                _subject.Add(item);
         }
     }
 }
