@@ -53,12 +53,35 @@ namespace DataStructures
         private void SetAt(int index, Node element)
         {
             CheckIndexWithinBounds(index);
-            var current = First;
-            for (int i = 0; i < index - 1; i++)
-                current = current.Next;
-            var temp = current.Next;
-            current.Next = element;
-            element.Next = temp.Next;
+            if (index == 0)
+            {
+                if (ReferenceEquals(element, null))
+                {
+                    First = First.Next;
+                    Count--;
+                }
+                else
+                {
+                    element.Next = First.Next;
+                    First = element;
+                }
+            }
+            else
+            {
+                var current = First;
+                for (int i = 0; i < index - 1; i++)
+                    current = current.Next;
+                if (ReferenceEquals(element, null))
+                {
+                    current.Next = current.Next.Next;
+                    Count--;
+                }
+                else
+                {
+                    element.Next = current.Next.Next;
+                    current.Next = element;
+                }
+            }
         }
 
         public override string ToString()
@@ -78,6 +101,18 @@ namespace DataStructures
         {
             if (index >= Count || index < 0)
                 throw new ArgumentOutOfRangeException();
+        }
+
+        public void Remove(int element)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (this[i].Value.Equals(element))
+                {
+                    this[i] = null;
+                    break;
+                }
+            }
         }
     }
 }

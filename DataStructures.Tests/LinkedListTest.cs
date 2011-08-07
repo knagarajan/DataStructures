@@ -71,6 +71,13 @@ namespace DataStructures.Tests
         }
 
         [TestMethod]
+        public void Remove()
+        {
+            VerifyRemove(_source.First(), _source);
+            VerifyRemove(_source.Last(), _source);
+        }
+
+        [TestMethod]
         public void ToStringTest()
         {
             // Arrange
@@ -127,19 +134,9 @@ namespace DataStructures.Tests
         [TestMethod]
         public void IndexerSet()
         {
-            // Arrange
-            Add(_source);
-            var index = 1;
-            var original = _subject[index];
-            Node newNode = new Node { Value = 10 };
-
-            // Act
-            _subject[index] = newNode;
-
-            // Assert
-            var actual = _subject[index];
-            Assert.AreSame(newNode, actual, "node");
-            Assert.AreSame(original.Next, actual.Next, "next node");
+            VerifyElementSetAt(0, _source);
+            VerifyElementSetAt(1, _source);
+            VerifyElementSetAt(_source.Count() - 1, _source);
         }
 
         [TestMethod]
@@ -165,12 +162,61 @@ namespace DataStructures.Tests
             Add(_source);
             _subject[-1] = new Node();
         }
+
+        [TestMethod]
+        public void IndexerSetNullElement()
+        {
+            // Arrange
+            Add(_source);
+            var index = 0;
+            var count = _subject.Count;
+            var element = _subject[index];
+
+            // Act
+            _subject[index] = null;
+
+            // Assert
+            Assert.AreEqual(count - 1, _subject.Count, "count");
+            Assert.AreNotSame(element, _subject[index], "still exists");
+        }
+
         #endregion Indexer tests
 
         private void Add(IList<int> expected)
         {
             foreach (var item in expected)
                 _subject.Add(item);
+        }
+
+        private void VerifyElementSetAt(int index, IList<int> source)
+        {
+            // Arrange
+            Add(source);
+            var original = _subject[index];
+            Node newNode = new Node { Value = 10 };
+
+            // Act
+            _subject[index] = newNode;
+
+            // Assert
+            var actual = _subject[index];
+            Assert.AreSame(newNode, actual, "node for {0}", index);
+            Assert.AreSame(original.Next, actual.Next, "next node for {0}", index);
+        }
+
+        private void VerifyRemove(int element, IList<int> source)
+        {
+            // Arrange
+            Add(source);
+            var index = _source.IndexOf(element);
+            var count = _subject.Count;
+
+            // Act
+            _subject.Remove(element);
+
+            // Assert
+            Assert.AreEqual(count - 1, _subject.Count, "count");
+            Assert.AreNotSame(element, _subject[index], "still exists");
         }
     }
 }
