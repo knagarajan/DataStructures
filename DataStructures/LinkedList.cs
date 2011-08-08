@@ -6,25 +6,28 @@ namespace DataStructures
     {
         internal const string Seperator = ", ";
 
-        public LinkedList(int capacity)
-        {
-            for (int i = 0; i < capacity; i++)
-                Add(0);
-        }
-
-        public LinkedList()
-            : this(0)
-        {
-        }
-
         internal Node First { get; private set; }
 
         public int Count { get; private set; }
 
+        public LinkedList()
+        {
+        }
+
         public Node this[int index]
         {
-            get { return GetAt(index); }
-            set { SetAt(index, value); }
+            get
+            {
+                if (!IsWithinBounds(index))
+                    throw new ArgumentOutOfRangeException();
+                return GetAt(index);
+            }
+            set
+            {
+                if (!IsWithinBounds(index))
+                    throw new ArgumentOutOfRangeException();
+                SetAt(index, value);
+            }
         }
 
         public void Add(int value)
@@ -41,18 +44,19 @@ namespace DataStructures
             Count++;
         }
 
-        private Node GetAt(int index)
+        public Node GetAt(int index)
         {
-            CheckIndexWithinBounds(index);
+            if (!IsWithinBounds(index))
+                return null;
             var current = First;
             for (int i = 0; i < index; i++)
                 current = current.Next;
             return current;
         }
 
-        private void SetAt(int index, Node element)
+        public void SetAt(int index, Node element)
         {
-            CheckIndexWithinBounds(index);
+            if (!IsWithinBounds(index)) return;
             if (index == 0)
             {
                 if (ReferenceEquals(element, null))
@@ -84,6 +88,26 @@ namespace DataStructures
             }
         }
 
+        public void Remove(int element)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                if (this[i].Value.Equals(element))
+                {
+                    this[i] = null;
+                    break;
+                }
+            }
+        }
+
+        public int IndexOf(int element)
+        {
+            if (First.Value.Equals(element)) return 0;
+            for (int i = 0; i < Count; i++)
+                if (this[i].Value == element) return i;
+            return -1;
+        }
+
         public override string ToString()
         {
             var result = string.Empty;
@@ -97,22 +121,9 @@ namespace DataStructures
             return result;
         }
 
-        private void CheckIndexWithinBounds(int index)
+        private bool IsWithinBounds(int index)
         {
-            if (index >= Count || index < 0)
-                throw new ArgumentOutOfRangeException();
-        }
-
-        public void Remove(int element)
-        {
-            for (int i = 0; i < Count; i++)
-            {
-                if (this[i].Value.Equals(element))
-                {
-                    this[i] = null;
-                    break;
-                }
-            }
+            return index > -1 && index < Count;
         }
     }
 }
