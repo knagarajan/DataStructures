@@ -125,5 +125,14 @@ namespace DataStructures
         {
             return index > -1 && index < Count;
         }
+
+        internal int TailIndexOf(int element)
+        {
+            var lastIndex = Count - 1;
+            if (First.Value.Equals(element)) return lastIndex;
+            for (int i = Count - 1; i >= 0; i--)
+                if (this[i].Value.Equals(element)) return lastIndex -= i;
+            return -1;
+        }
     }
 }

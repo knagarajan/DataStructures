@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq.Expressions;
 
 namespace DataStructures.Tests
 {
@@ -15,7 +16,7 @@ namespace DataStructures.Tests
         public void TestInitialize()
         {
             _subject = new LinkedList();
-            _source = new int[] { 1, 2, 3 };
+            _source = new int[] { 1, 2, 3, 4 };
         }
 
         [TestMethod]
@@ -59,52 +60,14 @@ namespace DataStructures.Tests
         public void RemoveFirst()
         {
             // first
-            VerifyRemove(_source.First(), _source, _source.Count() - 1);
+            VerifyRemove(new LinkedList(), _source.First(), _source, _source.Count() - 1);
             //middle
-            VerifyRemove(2, _source, _source.Count() - 1);
+            VerifyRemove(new LinkedList(), 2, _source, _source.Count() - 1);
             // last
-            VerifyRemove(_source.Last(), _source, _source.Count() - 1);
+            VerifyRemove(new LinkedList(), _source.Last(), _source, _source.Count() - 1);
             // does not exist
-            VerifyRemove(1138, _source, _source.Count());
+            VerifyRemove(new LinkedList(), 1138, _source, _source.Count());
         }
-
-        [TestMethod]
-        public void GetSetAtInvalidIndex()
-        {
-            Assert.IsNull(_subject.GetAt(1138));
-            //shouldn't throw exception
-            _subject.SetAt(1138, new Node());
-        }
-
-        //[TestMethod]
-        //public void RemoveNonExisting()
-        //{
-        //    // Arrange
-        //    Add(_source);
-
-        //    // does not exist
-        //    VerifyRemove(1138, _source.Count);
-        //}
-
-        //[TestMethod]
-        //public void RemoveMiddle()
-        //{
-        //    // Arrange
-        //    Add(_source);
-
-        //    //middle
-        //    VerifyRemove(2, _source.Count - 1);
-        //}
-
-        //[TestMethod]
-        //public void RemoveLast()
-        //{
-        //    // Arrange
-        //    Add(_source);
-
-        //    // last
-        //    VerifyRemove(_source.Last(), _source.Count - 1);
-        //}
 
         [TestMethod]
         public void ToStringTest()
@@ -131,6 +94,31 @@ namespace DataStructures.Tests
             VerifyIndexOf(_source.Count() - 1, _source.Last(), _source);
             // does not exist
             VerifyIndexOf(-1, 1138, _source);
+        }
+
+        [TestMethod]
+        public void TailIndexOf()
+        {
+            // first
+            VerifyTailIndexOf(0, _source.Last(), _source);
+            //middle
+            VerifyTailIndexOf(2, _source[_source.Count() - 1 - 2], _source);
+            // last
+            VerifyTailIndexOf(_source.Count() - 1, _source.First(), _source);
+            // does not exist
+            VerifyIndexOf(-1, 1138, _source);
+        }
+
+        /// <summary>
+        /// the remaining parts of GetAt and SetAt 
+        /// are tested through the indexer
+        /// </summary>
+        [TestMethod]
+        public void GetSetAtInvalidIndex()
+        {
+            Assert.IsNull(_subject.GetAt(1138));
+            //shouldn't throw exception
+            _subject.SetAt(1138, new Node());
         }
 
         #region Indexer tests
@@ -162,7 +150,7 @@ namespace DataStructures.Tests
         public void IndexerGetEqualToCount()
         {
             Add(_source);
-            var actual = _subject[3];
+            var actual = _subject[1138];
         }
 
         [TestMethod]
@@ -194,7 +182,7 @@ namespace DataStructures.Tests
         public void IndexerSetEqualToCount()
         {
             Add(_source);
-            _subject[3] = new Node();
+            _subject[1138] = new Node();
         }
 
         [TestMethod]
@@ -240,43 +228,50 @@ namespace DataStructures.Tests
             Assert.AreSame(original.Next, actual.Next, "next node for {0}", index);
         }
 
-        private void VerifyRemove(int element, IList<int> elements, int expectedCount)
+        private static void VerifyRemove(LinkedList subject, int element, IList<int> elements, int expectedCount)
         {
             // Arrange
-            _subject = new LinkedList();
-            Add(elements);
+            Add(subject, elements);
             var index = elements.IndexOf(element);
 
             // Act
-            _subject.Remove(element);
+            subject.Remove(element);
 
             // Assert
-            Assert.AreEqual(expectedCount, _subject.Count, "count for {0}", element);
-            Assert.AreNotSame(element, _subject.GetAt(index), "{0} still exists", element);
+            Assert.AreEqual(expectedCount, subject.Count, "count for {0}", element);
+            Assert.AreNotSame(element, subject.GetAt(index), "{0} still exists", element);
         }
 
-        private void VerifyIndexOf(int expectedIndex, int element, IList<int> source)
+        private static void VerifyIndexOf(int expectedIndex, int element, IList<int> source)
         {
-            Add(_source);
+            VerifyIndexMethod(new LinkedList(), l => l.IndexOf, expectedIndex, element, source);
+        }
+
+        private static void VerifyTailIndexOf(int expectedIndex, int element, IList<int> source)
+        {
+            VerifyIndexMethod(new LinkedList(), l => l.TailIndexOf, expectedIndex, element, source);
+        }
+
+        private static void VerifyIndexMethod(LinkedList subject, Func<LinkedList, Func<int, int>> indexOfMethod, int expectedIndex, int element, IList<int> source)
+        {
+            Add(subject, source);
 
             // Act
-            int actual = _subject.IndexOf(element);
+            int actual = indexOfMethod(subject).Invoke(element);
 
             // Assert
             Assert.AreEqual(expectedIndex, actual);
         }
 
+        private static void Add(LinkedList target, IList<int> elements)
+        {
+            foreach (var item in elements)
+                target.Add(item);
+        }
 
         private void Add(IList<int> elements)
         {
-            foreach (var item in elements)
-                _subject.Add(item);
-        }
-
-        private void Remove(IList<int> elements)
-        {
-            foreach (var item in elements)
-                _subject.Remove(item);
+            Add(_subject, elements);
         }
     }
 }
